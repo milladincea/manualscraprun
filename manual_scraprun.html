@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCRAP RUN — Manual de Instrucciones</title>
+<link href="https://fonts.googleapis.com/css2?family=Black+Ops+One&family=Share+Tech+Mono&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --negro: #0d0d0d;
+    --oxido: #1a1208;
+    --rojo: #c0392b;
+    --rojo-claro: #e74c3c;
+    --ambar: #e67e22;
+    --ambar-claro: #f39c12;
+    --crema: #f5f0e8;
+    --gris-claro: #d4cfc6;
+    --gris-medio: #8a8070;
+    --verde-scrap: #2ecc71;
+    --azul-scrap: #3498db;
+    --morado: #9b59b6;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--negro);
+    color: var(--crema);
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  /* TEXTURA DE FONDO */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.012) 2px, rgba(255,255,255,0.012) 4px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(255,150,0,0.03) 40px, rgba(255,150,0,0.03) 41px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* PORTADA */
+  .portada {
+    text-align: center;
+    padding: 60px 0 48px;
+    border-bottom: 2px solid var(--ambar);
+    margin-bottom: 56px;
+    position: relative;
+  }
+
+  .portada::before {
+    content: '// DOCUMENTO CLASIFICADO — REBELDES SOLAMENTE //';
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--rojo);
+    letter-spacing: 0.15em;
+    margin-bottom: 32px;
+    opacity: 0.8;
+  }
+
+  .titulo-juego {
+    font-family: 'Black Ops One', cursive;
+    font-size: clamp(52px, 10vw, 96px);
+    color: var(--ambar);
+    letter-spacing: 0.06em;
+    line-height: 1;
+    text-shadow: 4px 4px 0 var(--rojo), 8px 8px 0 rgba(192,57,43,0.3);
+    margin-bottom: 8px;
+  }
+
+  .titulo-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--gris-medio);
+    letter-spacing: 0.2em;
+    margin-bottom: 32px;
+  }
+
+  .portada-stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .stat-badge {
+    background: rgba(230,126,34,0.1);
+    border: 1px solid var(--ambar);
+    border-radius: 4px;
+    padding: 8px 20px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--ambar-claro);
+    letter-spacing: 0.1em;
+  }
+
+  /* SECCIONES */
+  .seccion {
+    margin-bottom: 52px;
+  }
+
+  .seccion-titulo {
+    font-family: 'Black Ops One', cursive;
+    font-size: 22px;
+    color: var(--ambar);
+    letter-spacing: 0.08em;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(230,126,34,0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .seccion-titulo::before {
+    content: attr(data-num);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 12px;
+    color: var(--rojo);
+    background: rgba(192,57,43,0.15);
+    border: 1px solid var(--rojo);
+    padding: 2px 8px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  .subseccion-titulo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--ambar-claro);
+    letter-spacing: 0.12em;
+    margin: 24px 0 10px;
+    text-transform: uppercase;
+  }
+
+  p { margin-bottom: 12px; color: var(--gris-claro); }
+  p:last-child { margin-bottom: 0; }
+
+  /* CAJA DESTACADA */
+  .caja {
+    background: rgba(255,255,255,0.03);
+    border-left: 3px solid var(--ambar);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+
+  .caja.roja { border-left-color: var(--rojo); }
+  .caja.verde { border-left-color: var(--verde-scrap); }
+  .caja.azul { border-left-color: var(--azul-scrap); }
+
+  /* ORDEN DEL JUEGO */
+  .orden-lista {
+    counter-reset: orden;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .orden-lista li {
+    counter-increment: orden;
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background: rgba(255,255,255,0.03);
+    border: 0.5px solid rgba(230,126,34,0.2);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+
+  .orden-lista li::before {
+    content: counter(orden);
+    font-family: 'Black Ops One', cursive;
+    font-size: 20px;
+    color: var(--ambar);
+    min-width: 28px;
+    line-height: 1.3;
+  }
+
+  .orden-lista li .step-text { color: var(--gris-claro); }
+  .orden-lista li strong { color: var(--crema); font-weight: 600; }
+
+  /* VEHÍCULOS */
+  .vehiculos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .vehiculo-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .vehiculo-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .vc-rojo::before { background: var(--rojo); }
+  .vc-azul::before { background: var(--azul-scrap); }
+  .vc-verde::before { background: var(--verde-scrap); }
+  .vc-morado::before { background: var(--morado); }
+  .vc-ambar::before { background: var(--ambar); }
+
+  .vehiculo-nombre {
+    font-family: 'Black Ops One', cursive;
+    font-size: 16px;
+    color: var(--crema);
+    margin-bottom: 2px;
+  }
+
+  .vehiculo-alias {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gris-medio);
+    margin-bottom: 14px;
+    letter-spacing: 0.08em;
+  }
+
+  .stat-mini {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+
+  .stat-mini-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--gris-medio);
+    width: 72px;
+    flex-shrink: 0;
+    letter-spacing: 0.05em;
+  }
+
+  .stat-mini-bar {
+    flex: 1;
+    height: 5px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stat-mini-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--ambar);
+  }
+
+  .stat-mini-val {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gris-medio);
+    width: 14px;
+    text-align: right;
+  }
+
+  .vehiculo-poder {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
+
+  .poder-tag {
+    display: inline-block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 6px;
+    letter-spacing: 0.06em;
+  }
+
+  .poder-tag.ventaja { background: rgba(46,204,113,0.15); color: var(--verde-scrap); border: 0.5px solid var(--verde-scrap); }
+  .poder-tag.desventaja { background: rgba(192,57,43,0.15); color: var(--rojo-claro); border: 0.5px solid var(--rojo); }
+
+  .poder-texto {
+    font-size: 12px;
+    color: var(--gris-claro);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  /* BIOMAS */
+  .bioma-item {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    background: rgba(255,255,255,0.02);
+    border-radius: 6px;
+    padding: 16px;
+    border: 0.5px solid rgba(255,255,255,0.07);
+  }
+
+  .bioma-num {
+    font-family: 'Black Ops One', cursive;
+    font-size: 28px;
+    color: rgba(230,126,34,0.25);
+    line-height: 1;
+    min-width: 32px;
+  }
+
+  .bioma-nombre {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 13px;
+    color: var(--ambar-claro);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+
+  .bioma-desc { font-size: 13px; color: var(--gris-claro); line-height: 1.6; }
+
+  .casillas-mini {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 10px;
+  }
+
+  .casilla-mini {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+  }
+
+  .cm-neutra { background: rgba(138,128,112,0.2); color: var(--gris-medio); border: 0.5px solid rgba(138,128,112,0.3); }
+  .cm-carta { background: rgba(155,89,182,0.2); color: #c39bd3; border: 0.5px solid rgba(155,89,182,0.4); }
+  .cm-evento { background: rgba(230,126,34,0.15); color: var(--ambar-claro); border: 0.5px solid rgba(230,126,34,0.3); }
+  .cm-robocop { background: rgba(192,57,43,0.2); color: #e88; border: 0.5px solid rgba(192,57,43,0.4); }
+  .cm-duelo { background: rgba(52,152,219,0.2); color: #7fc8f5; border: 0.5px solid rgba(52,152,219,0.4); }
+  .cm-trampa { background: rgba(231,76,60,0.15); color: #f1948a; border: 0.5px solid rgba(231,76,60,0.3); }
+
+  /* CARTAS */
+  .cartas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .carta-item {
+    border-radius: 6px;
+    padding: 14px 16px;
+    border: 0.5px solid transparent;
+  }
+
+  .carta-verde { background: rgba(46,204,113,0.08); border-color: rgba(46,204,113,0.3); }
+  .carta-roja { background: rgba(192,57,43,0.08); border-color: rgba(192,57,43,0.3); }
+  .carta-azul { background: rgba(52,152,219,0.08); border-color: rgba(52,152,219,0.3); }
+  .carta-ambar { background: rgba(230,126,34,0.08); border-color: rgba(230,126,34,0.3); }
+  .carta-negra { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.12); }
+
+  .carta-tipo {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    opacity: 0.7;
+  }
+
+  .carta-verde .carta-tipo { color: var(--verde-scrap); }
+  .carta-roja .carta-tipo { color: var(--rojo-claro); }
+  .carta-azul .carta-tipo { color: var(--azul-scrap); }
+  .carta-ambar .carta-tipo { color: var(--ambar-claro); }
+  .carta-negra .carta-tipo { color: var(--gris-medio); }
+
+  .carta-nombre {
+    font-family: 'Barlow', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--crema);
+    margin-bottom: 6px;
+  }
+
+  .carta-efecto {
+    font-size: 12px;
+    color: var(--gris-claro);
+    line-height: 1.5;
+  }
+
+  .carta-cant {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--gris-medio);
+    margin-top: 8px;
+  }
+
+  /* ROBOCOP MEDIDOR */
+  .robocop-medidor {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin: 16px 0;
+  }
+
+  .rc-ficha {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--rojo);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    color: var(--rojo);
+  }
+
+  .rc-ficha.llena { background: var(--rojo); color: white; }
+  .rc-arrow { font-size: 18px; color: var(--gris-medio); }
+  .rc-efecto {
+    background: rgba(192,57,43,0.15);
+    border: 1px solid var(--rojo);
+    border-radius: 6px;
+    padding: 8px 14px;
+    font-size: 12px;
+    color: var(--rojo-claro);
+    font-family: 'Share Tech Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* TABLA RESUMEN */
+  .tabla-resumen {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 13px;
+  }
+
+  .tabla-resumen th {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: var(--ambar);
+    text-align: left;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(230,126,34,0.3);
+  }
+
+  .tabla-resumen td {
+    padding: 8px 12px;
+    color: var(--gris-claro);
+    border-bottom: 0.5px solid rgba(255,255,255,0.05);
+    vertical-align: top;
+  }
+
+  .tabla-resumen tr:last-child td { border-bottom: none; }
+
+  /* PIE */
+  .pie {
+    text-align: center;
+    padding-top: 40px;
+    border-top: 1px solid rgba(230,126,34,0.2);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--gris-medio);
+    letter-spacing: 0.12em;
+  }
+
+  @media print {
+    body { background: white; color: black; }
+    body::before { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- PORTADA -->
+  <div class="portada">
+    <div class="titulo-juego">SCRAP RUN</div>
+    <div class="titulo-sub">MANUAL DE INSTRUCCIONES — VERSIÓN PROTOTIPO</div>
+    <div class="portada-stats">
+      <div class="stat-badge">2 — 5 JUGADORES</div>
+      <div class="stat-badge">~30 MINUTOS</div>
+      <div class="stat-badge">DADO × CARTAS × TABLERO</div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 1: CONTEXTO -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="01">El mundo de Scrap Run</div>
+    <p>En un mundo distópico de estética scrappunk, los robots dominan la sociedad desde sus ciudadelas blindadas. Debajo de ellos viven los androides de segunda mano, y en los márgenes, en los basurales, sobreviven los últimos humanos: rebeldes que reciclan partes robóticas para mantenerse en pie.</p>
+    <p>Tú eres uno de ellos. Tu banda acaba de robar recursos de la Ciudadela y ahora tienen que escapar. El problema: todos quieren llegar primero a la Fuga, y no todos van a colaborar para lograrlo.</p>
+    <div class="caja">
+      <strong style="color:var(--ambar);">Objetivo:</strong> <span style="color:var(--gris-claro);">Ser el primer jugador en llegar a la casilla META cruzando todos los biomas del tablero, usando tu vehículo, las cartas y el tablero a tu favor.</span>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 2: COMPONENTES -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="02">Componentes del juego</div>
+    <table class="tabla-resumen">
+      <thead><tr><th>Componente</th><th>Cantidad</th><th>Descripción</th></tr></thead>
+      <tbody>
+        <tr><td>Tablero base</td><td>1</td><td>Soporte con salida y meta fijas. Espacio para 4 piezas de bioma intercambiables.</td></tr>
+        <tr><td>Piezas de bioma</td><td>4</td><td>Ciudadela, Anillo Industrial, Zona Muerta, Basural. Se colocan en el orden que decidan los jugadores.</td></tr>
+        <tr><td>Cartas del mazo</td><td>35</td><td>Mazo único mezclado: verdes, rojas, azules, amarillas y negras.</td></tr>
+        <tr><td>Cartas de vehículo</td><td>5</td><td>Una por vehículo. Poder especial único, se usa una vez por partida.</td></tr>
+        <tr><td>Fichas de Robocop</td><td>15</td><td>3 por jugador. Se acumulan en el medidor individual.</td></tr>
+        <tr><td>Fichas de trampa</td><td>3</td><td>Exclusivas del Centinela. Se colocan en casillas neutras del tablero.</td></tr>
+        <tr><td>Peones / vehículos</td><td>5</td><td>Una pieza por jugador, diferenciada por color o forma.</td></tr>
+        <tr><td>Dado</td><td>1</td><td>Dado de 8 caras para avanzar en el tablero.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 3: PREPARACIÓN -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="03">Preparación — cómo se arma la partida</div>
+    <ol class="orden-lista">
+      <li><span class="step-text"><strong>Elegir vehículo:</strong> cada jugador elige su vehículo y toma su carta de vehículo correspondiente. La guarda en mano — la puede usar una sola vez durante la partida.</span></li>
+      <li><span class="step-text"><strong>Dado de orden:</strong> todos tiran el dado. El que saca más alto va primero en el armado del tablero, el resto sigue en orden descendente.</span></li>
+      <li><span class="step-text"><strong>Armado del tablero:</strong> cada jugador, en su orden, toma una pieza de bioma y la coloca entre la Salida y la Meta. El que va primero tiene más control estratégico sobre el recorrido.</span></li>
+      <li><span class="step-text"><strong>Mazo:</strong> mezclar las 35 cartas y colocarlas boca abajo al centro de la mesa. Cuando el mazo se agota, se vuelve a mezclar y se reutiliza.</span></li>
+      <li><span class="step-text"><strong>Medidores:</strong> cada jugador coloca su medidor de Robocop en 0. El jugador que sacó más alto en el dado de orden empieza la partida.</span></li>
+    </ol>
+  </div>
+
+  <!-- SECCIÓN 4: VEHÍCULOS -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="04">Vehículos jugables</div>
+    <p style="margin-bottom:16px;">Todos los vehículos suman 10 puntos distribuidos entre velocidad, blindaje y habilidad. Ninguno es el mejor en todo — el estilo de juego es lo que los diferencia.</p>
+
+    <div class="vehiculos-grid">
+
+      <div class="vehiculo-card vc-rojo">
+        <div class="vehiculo-nombre">La Chatarrera</div>
+        <div class="vehiculo-alias">AUTO HUMANO REBELDE</div>
+        <div class="stat-mini"><span class="stat-mini-label">VELOCIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:40%;background:var(--rojo)"></div></div><span class="stat-mini-val">2</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">BLINDAJE</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:60%;background:var(--rojo)"></div></div><span class="stat-mini-val">3</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">HABILIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:100%;background:var(--rojo)"></div></div><span class="stat-mini-val">5</span></div>
+        <div class="vehiculo-poder">
+          <span class="poder-tag ventaja">VENTAJA — 1 VEZ</span>
+          <div class="poder-texto">Roba 2 cartas en vez de 1 al caer en una casilla de carta.</div>
+          <span class="poder-tag desventaja">DESVENTAJA — SIEMPRE</span>
+          <div class="poder-texto">El dado tiene un mínimo de 2: si sacas 1, avanza 2 igual.</div>
+        </div>
+      </div>
+
+      <div class="vehiculo-card vc-azul">
+        <div class="vehiculo-nombre">El Androide</div>
+        <div class="vehiculo-alias">CHASIS DE SEGUNDA MANO</div>
+        <div class="stat-mini"><span class="stat-mini-label">VELOCIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:80%;background:var(--azul-scrap)"></div></div><span class="stat-mini-val">4</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">BLINDAJE</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:40%;background:var(--azul-scrap)"></div></div><span class="stat-mini-val">2</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">HABILIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:80%;background:var(--azul-scrap)"></div></div><span class="stat-mini-val">4</span></div>
+        <div class="vehiculo-poder">
+          <span class="poder-tag ventaja">VENTAJA — 1 VEZ</span>
+          <div class="poder-texto">Mueve a cualquier jugador 1 casilla atrás en su turno.</div>
+          <span class="poder-tag desventaja">DESVENTAJA — SIEMPRE</span>
+          <div class="poder-texto">Pierde su turno si acumula 2 fichas de Robocop (no espera a 3).</div>
+        </div>
+      </div>
+
+      <div class="vehiculo-card vc-verde">
+        <div class="vehiculo-nombre">El Saqueador</div>
+        <div class="vehiculo-alias">PICK-UP BLINDADO</div>
+        <div class="stat-mini"><span class="stat-mini-label">VELOCIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:60%;background:var(--verde-scrap)"></div></div><span class="stat-mini-val">3</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">BLINDAJE</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:100%;background:var(--verde-scrap)"></div></div><span class="stat-mini-val">5</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">HABILIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:40%;background:var(--verde-scrap)"></div></div><span class="stat-mini-val">2</span></div>
+        <div class="vehiculo-poder">
+          <span class="poder-tag ventaja">VENTAJA — SIEMPRE</span>
+          <div class="poder-texto">Ignora el efecto de las casillas de trampa.</div>
+          <span class="poder-tag desventaja">DESVENTAJA — SIEMPRE</span>
+          <div class="poder-texto">Solo puede robar carta cada 2 turnos, no en turnos consecutivos.</div>
+        </div>
+      </div>
+
+      <div class="vehiculo-card vc-morado">
+        <div class="vehiculo-nombre">La Fantasma</div>
+        <div class="vehiculo-alias">MOTO ELÉCTRICA ROBÓTICA</div>
+        <div class="stat-mini"><span class="stat-mini-label">VELOCIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:100%;background:var(--morado)"></div></div><span class="stat-mini-val">5</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">BLINDAJE</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:20%;background:var(--morado)"></div></div><span class="stat-mini-val">1</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">HABILIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:80%;background:var(--morado)"></div></div><span class="stat-mini-val">4</span></div>
+        <div class="vehiculo-poder">
+          <span class="poder-tag ventaja">VENTAJA — 1 VEZ</span>
+          <div class="poder-texto">Puede relanzar el dado una vez en cualquier turno.</div>
+          <span class="poder-tag desventaja">DESVENTAJA — SIEMPRE</span>
+          <div class="poder-texto">Las trampas le afectan doble: en vez de volver al inicio del bioma actual, vuelve al inicio del bioma anterior.</div>
+        </div>
+      </div>
+
+      <div class="vehiculo-card vc-ambar">
+        <div class="vehiculo-nombre">El Centinela</div>
+        <div class="vehiculo-alias">TANQUETA ROBOCOP REFORMADA</div>
+        <div class="stat-mini"><span class="stat-mini-label">VELOCIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:20%;background:var(--ambar)"></div></div><span class="stat-mini-val">1</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">BLINDAJE</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:100%;background:var(--ambar)"></div></div><span class="stat-mini-val">5</span></div>
+        <div class="stat-mini"><span class="stat-mini-label">HABILIDAD</span><div class="stat-mini-bar"><div class="stat-mini-fill" style="width:80%;background:var(--ambar)"></div></div><span class="stat-mini-val">4</span></div>
+        <div class="vehiculo-poder">
+          <span class="poder-tag ventaja">VENTAJA — 1 VEZ POR TURNO</span>
+          <div class="poder-texto">Puede colocar una ficha de trampa en cualquier casilla neutra que ya haya pasado. Si otro jugador cae ahí, retrocede 3 casillas. Máximo 2 trampas activas al mismo tiempo.</div>
+          <span class="poder-tag desventaja">DESVENTAJA — SIEMPRE</span>
+          <div class="poder-texto">Nunca puede relanzar el dado, sin importar qué carta tenga.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECCIÓN 5: TABLERO -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="05">El tablero — biomas y casillas</div>
+    <p style="margin-bottom:16px;">El tablero tiene 40 casillas en total distribuidas en 4 biomas intercambiables. La Salida y la Meta son fijas. El orden de los biomas del medio lo deciden los jugadores durante la preparación.</p>
+
+    <div class="bioma-item">
+      <div class="bioma-num">S</div>
+      <div>
+        <div class="bioma-nombre">SALIDA — LA CIUDADELA (INTERIOR)</div>
+        <div class="bioma-desc">Punto de partida fijo. Todos los vehículos arrancan desde aquí con su carta de vehículo en mano.</div>
+      </div>
+    </div>
+
+    <div class="bioma-item">
+      <div class="bioma-num">1</div>
+      <div>
+        <div class="bioma-nombre">LA CIUDADELA — 8 CASILLAS</div>
+        <div class="bioma-desc">Zona de élite robótica. Alta vigilancia. Alta densidad de Robocops que refleja el control de la zona.</div>
+        <div class="casillas-mini">
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-robocop">Robocop</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-robocop">Robocop</span>
+          <span class="casilla-mini cm-evento">Control de identidad</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bioma-item">
+      <div class="bioma-num">2</div>
+      <div>
+        <div class="bioma-nombre">ANILLO INDUSTRIAL — 10 CASILLAS</div>
+        <div class="bioma-desc">Fábricas y maquinaria. El bioma más interactivo: muchos duelos entre jugadores y dos oportunidades de carta.</div>
+        <div class="casillas-mini">
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-duelo">Duelo</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-evento">Sabotaje</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-duelo">Duelo</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bioma-item">
+      <div class="bioma-num">3</div>
+      <div>
+        <div class="bioma-nombre">ZONA MUERTA — 8 CASILLAS</div>
+        <div class="bioma-desc">Tierra de nadie. El peligro aquí viene del tablero mismo, no de los rivales. Trampas y evento grupal.</div>
+        <div class="casillas-mini">
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-trampa">Trampa</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-evento">Todos al suelo</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-trampa">Trampa</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bioma-item">
+      <div class="bioma-num">4</div>
+      <div>
+        <div class="bioma-nombre">EL BASURAL — 10 CASILLAS</div>
+        <div class="bioma-desc">Zona humana. El bioma más generoso en cartas. Los duelos son cachipún, no dados. Mucha interacción directa.</div>
+        <div class="casillas-mini">
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-duelo">Duelo cachipún</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-evento">Mercado negro</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-duelo">Duelo cachipún</span>
+          <span class="casilla-mini cm-carta">Carta</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="bioma-item">
+      <div class="bioma-num">M</div>
+      <div>
+        <div class="bioma-nombre">LA FUGA — META — 4 CASILLAS</div>
+        <div class="bioma-desc">Zona exterior fija. Sin duelos ni eventos — solo Robocops en los últimos metros. Llegar primero es ganar.</div>
+        <div class="casillas-mini">
+          <span class="casilla-mini cm-robocop">Robocop</span>
+          <span class="casilla-mini cm-neutra">Neutra</span>
+          <span class="casilla-mini cm-robocop">Robocop</span>
+          <span class="casilla-mini cm-carta" style="background:rgba(46,204,113,0.2);color:#2ecc71;border-color:rgba(46,204,113,0.4);">META</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 6: TURNO -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="06">Cómo se juega un turno</div>
+    <ol class="orden-lista">
+      <li><span class="step-text"><strong>Tira el dado</strong> de 8 caras y avanza esa cantidad de casillas.</span></li>
+      <li><span class="step-text"><strong>Aplica el efecto de la casilla</strong> en la que caíste (ver tipos de casilla más abajo).</span></li>
+      <li><span class="step-text"><strong>Opcionalmente</strong> puedes jugar una carta de tu mano antes o después de moverte, si tienes alguna. Solo una carta por turno.</span></li>
+      <li><span class="step-text">Pasa el turno al siguiente jugador en sentido horario.</span></li>
+    </ol>
+
+    <div class="subseccion-titulo">Tipos de casilla</div>
+    <table class="tabla-resumen">
+      <thead><tr><th>Casilla</th><th>Efecto</th></tr></thead>
+      <tbody>
+        <tr><td style="color:var(--gris-medio);">Neutra</td><td>Nada. Solo avanzas.</td></tr>
+        <tr><td style="color:#c39bd3;">Carta</td><td>Robas 1 carta del mazo y la guardas en tu mano. Las cartas negras se aplican de inmediato y no se pueden guardar.</td></tr>
+        <tr><td style="color:#f1948a;">Robocop</td><td>Sumas 1 ficha a tu medidor de Robocop.</td></tr>
+        <tr><td style="color:#7fc8f5;">Duelo</td><td>Eliges a un rival. En el Anillo Industrial: tiran dado enfrentado, el menor retrocede tantas casillas como la diferencia. En el Basural: juegan cachipún, el perdedor retrocede 2 casillas.</td></tr>
+        <tr><td style="color:var(--ambar-claro);">Evento</td><td>Se aplica el evento específico del bioma (ver sección 5).</td></tr>
+        <tr><td style="color:#f1948a;">Trampa</td><td>Retrocedes al inicio del bioma actual. La Fantasma retrocede al inicio del bioma anterior. El Saqueador la ignora.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECCIÓN 7: ROBOCOP -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="07">El medidor de Robocop</div>
+    <p>Cada jugador tiene un medidor individual de 0 a 3 fichas de Robocop. Las fichas se acumulan al caer en casillas de Robocop o por efecto de ciertas cartas.</p>
+
+    <div class="robocop-medidor">
+      <div class="rc-ficha llena">1</div>
+      <div class="rc-ficha llena">2</div>
+      <div class="rc-ficha llena">3</div>
+      <div class="rc-arrow">→</div>
+      <div class="rc-efecto">RETROCEDE AL INICIO DEL BIOMA ACTUAL · MEDIDOR SE RESETEA A 0</div>
+    </div>
+
+    <div class="caja roja">
+      <strong style="color:var(--rojo-claro);">El Androide</strong> <span style="color:var(--gris-claro);">es la excepción: pierde su turno al acumular 2 fichas, no espera a 3.</span>
+    </div>
+    <div class="caja">
+      <span style="color:var(--gris-claro);">Los demás jugadores pueden aumentar tu medidor usando la carta azul <strong style="color:var(--crema);">¡Soplón!</strong></span>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 8: CARTAS -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="08">Las cartas — mazo de 35</div>
+    <p style="margin-bottom:16px;">Un solo mazo mezclado. Se roba al caer en una casilla de carta. Solo una carta por turno puede jugarse desde la mano. Cuando el mazo se agota, se mezcla y reutiliza.</p>
+
+    <div class="subseccion-titulo">Verdes — avance (7 cartas)</div>
+    <div class="cartas-grid">
+      <div class="carta-item carta-verde">
+        <div class="carta-tipo">VERDE · AVANCE</div>
+        <div class="carta-nombre">Turbo de chatarra</div>
+        <div class="carta-efecto">Avanza 3 casillas extra este turno, además del dado.</div>
+        <div class="carta-cant">×3</div>
+      </div>
+      <div class="carta-item carta-verde">
+        <div class="carta-tipo">VERDE · AVANCE</div>
+        <div class="carta-nombre">Ruta alternativa</div>
+        <div class="carta-efecto">Ignora el efecto de la casilla en la que caes este turno.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-verde">
+        <div class="carta-tipo">VERDE · AVANCE</div>
+        <div class="carta-nombre">Dado caliente</div>
+        <div class="carta-efecto">Tira el dado dos veces y elige el resultado que prefieras.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+    </div>
+
+    <div class="subseccion-titulo">Rojas — retroceso (7 cartas)</div>
+    <div class="cartas-grid">
+      <div class="carta-item carta-roja">
+        <div class="carta-tipo">ROJA · RETROCESO</div>
+        <div class="carta-nombre">Falla mecánica</div>
+        <div class="carta-efecto">Retrocede tantas casillas como el número que saques tirando el dado ahora.</div>
+        <div class="carta-cant">×3</div>
+      </div>
+      <div class="carta-item carta-roja">
+        <div class="carta-tipo">ROJA · RETROCESO</div>
+        <div class="carta-nombre">Bloqueo de ruta</div>
+        <div class="carta-efecto">Pierdes tu próximo turno y no puedes jugar cartas ese turno tampoco.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-roja">
+        <div class="carta-tipo">ROJA · RETROCESO</div>
+        <div class="carta-nombre">Señal de interferencia</div>
+        <div class="carta-efecto">Retrocede al inicio del bioma en el que estás.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+    </div>
+
+    <div class="subseccion-titulo">Azules — interacción (8 cartas)</div>
+    <div class="cartas-grid">
+      <div class="carta-item carta-azul">
+        <div class="carta-tipo">AZUL · INTERACCIÓN</div>
+        <div class="carta-nombre">¡Intercambio forzado!</div>
+        <div class="carta-efecto">Intercambia tu posición en el tablero con el jugador que va en primer lugar.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-azul">
+        <div class="carta-tipo">AZUL · INTERACCIÓN</div>
+        <div class="carta-nombre">Desafío en la chatarra</div>
+        <div class="carta-efecto">Elige a un rival. Juegan cachipún. El perdedor retrocede 3 casillas.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-azul">
+        <div class="carta-tipo">AZUL · INTERACCIÓN</div>
+        <div class="carta-nombre">¡Soplón!</div>
+        <div class="carta-efecto">Elige a un rival. Le añades 1 ficha de Robocop a su medidor.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-azul">
+        <div class="carta-tipo">AZUL · INTERACCIÓN</div>
+        <div class="carta-nombre">Imán de chatarra</div>
+        <div class="carta-efecto">Roba 1 carta de la mano de cualquier rival y úsala o guárdala.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+    </div>
+
+    <div class="subseccion-titulo">Amarillas — evento especial (7 cartas)</div>
+    <div class="cartas-grid">
+      <div class="carta-item carta-ambar">
+        <div class="carta-tipo">AMARILLA · EVENTO</div>
+        <div class="carta-nombre">Tormenta de basura</div>
+        <div class="carta-efecto">Todos tiran el dado. El que saque menos retrocede 2 casillas. Tú quedas inmune.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-ambar">
+        <div class="carta-tipo">AMARILLA · EVENTO</div>
+        <div class="carta-nombre">Carrera relámpago</div>
+        <div class="carta-efecto">Todos los jugadores tiran el dado y avanzan en orden. Luego continúa tu turno normal.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+      <div class="carta-item carta-ambar">
+        <div class="carta-tipo">AMARILLA · EVENTO</div>
+        <div class="carta-nombre">Taller clandestino</div>
+        <div class="carta-efecto">Descarta todos tus Robocops acumulados. Solo usable si tienes al menos 1.</div>
+        <div class="carta-cant">×1</div>
+      </div>
+      <div class="carta-item carta-ambar">
+        <div class="carta-tipo">AMARILLA · EVENTO</div>
+        <div class="carta-nombre">Mercado negro</div>
+        <div class="carta-efecto">Cada jugador descarta 1 carta y roba 1 nueva. Tú robas 2.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+    </div>
+
+    <div class="subseccion-titulo">Negras — Robocop (6 cartas)</div>
+    <div class="caja roja" style="margin-bottom:12px;">
+      <strong style="color:var(--rojo-claro);">Importante:</strong> <span style="color:var(--gris-claro);">las cartas negras no se guardan en la mano. Se revelan al robarlas y se aplican de inmediato. No pueden bloquearse.</span>
+    </div>
+    <div class="cartas-grid">
+      <div class="carta-item carta-negra">
+        <div class="carta-tipo">NEGRA · ROBOCOP</div>
+        <div class="carta-nombre">Robocop en persecución</div>
+        <div class="carta-efecto">Suma 1 ficha a tu medidor de Robocop. Si llegas a 3 (o 2 siendo El Androide), aplica la penalización y resetea.</div>
+        <div class="carta-cant">×4</div>
+      </div>
+      <div class="carta-item carta-negra">
+        <div class="carta-tipo">NEGRA · ROBOCOP</div>
+        <div class="carta-nombre">Alerta máxima</div>
+        <div class="carta-efecto">Suma 2 fichas de golpe al medidor. Muy probable que active la penalización al instante.</div>
+        <div class="carta-cant">×2</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN 9: FIN -->
+  <div class="seccion">
+    <div class="seccion-titulo" data-num="09">Fin de la partida</div>
+    <p>El primer jugador en llegar a la casilla META gana la partida. No importa con cuántas cartas en mano o cuántos Robocops haya acumulado — solo importa llegar primero.</p>
+    <div class="caja verde">
+      <strong style="color:var(--verde-scrap);">No es necesario caer exactamente en la META.</strong> <span style="color:var(--gris-claro);">Si tu dado te lleva más allá de ella, igualmente ganas al cruzarla.</span>
+    </div>
+  </div>
+
+  <div class="pie">
+    SCRAP RUN · PROTOTIPO · MANUAL V1 · DOCUMENTO EN DESARROLLO
+  </div>
+
+</div>
+</body>
+</html>
